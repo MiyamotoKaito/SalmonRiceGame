@@ -1,6 +1,8 @@
 using NovelGame;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.Build.Content;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class MainTextController : MonoBehaviour
@@ -8,11 +10,18 @@ public class MainTextController : MonoBehaviour
     [SerializeField] TextMeshProUGUI _mainTextObject;
     void Start()
     {
+        //最初の行のテキストを表示、または命令を実行
+        string statement = GamaManager.Instance.userManager.GetCurrentSentence();
+        if (GamaManager.Instance.userManager.IsStatement(statement))
+        {
+            GamaManager.Instance.userManager.ExecuteStatement(statement);
+            GoToNextLine();
+        }
         DisPlayText();
     }
     void Update()
     {
-       if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             GoToNextLine();
             DisPlayText();
@@ -24,6 +33,12 @@ public class MainTextController : MonoBehaviour
     public void GoToNextLine()
     {
         GamaManager.Instance.lineNumber++;
+        string sectence = GamaManager.Instance.userManager.GetCurrentSentence();
+        if (GamaManager.Instance.userManager.IsStatement(sectence))
+        {
+            GamaManager.Instance.userManager.ExecuteStatement(sectence);
+            GoToNextLine();
+        }
     }
     /// <summary>
     /// テキスト表示

@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,41 +7,61 @@ namespace NovelGame
 {
     public class ImageManager : MonoBehaviour
     {
-        [SerializeField] Sprite _backGrond1;
-        [SerializeField] GameObject _backGroundObject;
+        [SerializeField] Sprite[] _backgrounds;
+        [SerializeField] Sprite[] _events;
+        [SerializeField] GameObject _backgroundObject;
+        [SerializeField] GameObject _eventObject;
         [SerializeField] GameObject _imagePrefab;
 
-        //テキストファイルから、文字列でSpriteやGameObjectを扱えるようにする
-        Dictionary<string, Sprite> _textToSprites;
-        Dictionary<string, GameObject> _textToParentObject;
-        //操作したいPrefabを指定できるようにするための辞書
         Dictionary<string, GameObject> _textToSpriteObject;
-        private void Awake()
+
+        void Awake()
         {
-            _textToSprites = new Dictionary<string, Sprite>();
-            _textToSprites.Add("BackGround1",_backGrond1);
-
-            _textToParentObject = new Dictionary<string, GameObject>();
-            _textToParentObject.Add("BackGroundObject", _backGroundObject);
-
             _textToSpriteObject = new Dictionary<string, GameObject>();
         }
-        /// <summary>
-        /// 画像の配置
-        /// </summary>
+
+        // 画像を配置する
         public void PutImage(string imageName, string parentObjectName)
         {
-            Sprite image = _textToSprites[imageName];
-            GameObject parentObject = _textToParentObject[parentObjectName];
+            Sprite image = GetSprite(imageName);
+            GameObject parentObject = GetParentObject(parentObjectName);
 
-            Vector2 pos = new Vector2 (0,0);
-            Quaternion rot = Quaternion.identity;
+            if (image == null || parentObject == null) return;
+
+            Vector2 position = new Vector2(0, 0);
+            Quaternion rotation = Quaternion.identity;
             Transform parent = parentObject.transform;
-            GameObject item = Instantiate(_imagePrefab, pos, rot, parent);
+            GameObject item = Instantiate(_imagePrefab, position, rotation, parent);
             item.GetComponent<Image>().sprite = image;
-
             _textToSpriteObject.Add(imageName, item);
         }
-    }
 
+        Sprite GetSprite(string imageName)
+        {
+            if (imageName.StartsWith("background"))
+            {
+                int index = int.Parse(imageName.Replace("background", "")) - 1;
+                return (index >= 0 && index < _backgrounds.Length) ? _backgrounds[index] : null;
+            }
+            else if (imageName.StartsWith("eventCG"))
+            {
+                int index = int.Parse(imageName.Replace("eventCG", "")) - 1;
+                return (index >= 0 && index < _events.Length) ? _events[index] : null;
+            }
+            return null;
+        }
+
+        GameObject GetParentObject(string parentObjectName)
+        {
+            switch (parentObjectName)
+            {
+                case "backgroundObject":
+                    return _backgroundObject;
+                case "eventObject":
+                    return _eventObject;
+                default:
+                    return null;
+            }
+        }
+    }
 }

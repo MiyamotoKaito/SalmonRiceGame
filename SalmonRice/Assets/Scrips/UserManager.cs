@@ -29,5 +29,28 @@ namespace NovelGame
         {
             return _sentences[GamaManager.Instance.lineNumber];
         }
+        /// <summary>
+        /// •¶‚ª–½—ß‚©‚Ç‚¤‚©
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <returns></returns>
+        public bool IsStatement(string sentence)
+        {
+            if (sentence[0] == '&')
+            {
+                return true;
+            }
+            return false;
+        }
+        public void ExecuteStatement(string sentence)
+        {
+            string[] words = sentence.Split(' ');
+            switch (words[0])
+            {
+                case "&img":
+                    GamaManager.Instance.imageManager.PutImage(words[1], words[2]);
+                    break;
+            }
+        }
     }
 }
