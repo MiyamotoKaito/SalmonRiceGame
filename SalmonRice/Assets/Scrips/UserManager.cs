@@ -15,7 +15,7 @@ namespace NovelGame
         {
             //テキストのファイルの中身を、一行ずつリストに入れておく
             StringReader reader = new StringReader(_textFile.text);
-            while (reader.Peek() != 1)
+            while (reader.Peek() != -1)
             {
                 string line = reader.ReadLine();
                 _sentences.Add(line);
