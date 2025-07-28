@@ -1,3 +1,8 @@
+&img background1 backgroundObject
 早坂りゅうのすけ
 ここに
 !!!爆誕!!!
+&img eventCG1 eventObject
+気が付けば俺は光ったメガネに殺されていた。
+&img eventCG2 eventObject
+敗北!
