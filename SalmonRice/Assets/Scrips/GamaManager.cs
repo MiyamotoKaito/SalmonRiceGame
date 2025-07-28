@@ -5,10 +5,17 @@ namespace NovelGame
 {
     public class GamaManager : MonoBehaviour
     {
-        public static GamaManager instance;
+        //別のクラスからGameManagerの変数などを使えるようにするためのもの
+        public static GamaManager Instance { get; private set; }
+        public MainTextController mainTextController;
+        public UserManager userManager;
+        //ユーザーのスクリプトの、今の行の数値、クリックのたびに1ずつ増えていく
+        [System.NonSerialized] public int lineNumber;
         private void Awake()
         {
-            instance = this;
+            //これで別のクラスからGameManagerの変数などを使えるようにする
+            Instance = this;
+            lineNumber = 0;
         }
     }
     
